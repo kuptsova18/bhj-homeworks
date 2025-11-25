@@ -9,7 +9,7 @@ function loadTask() {
     if (savedTasks) {
         try {
             const tasks = JSON.parse(savedTasks);
-            tasks.forEach(element => { 
+            tasks.forEach(element => {
                 addTask(element);
             });
         } catch (error) {
@@ -19,7 +19,7 @@ function loadTask() {
     }
 }
 
-function saveTasks(){
+function saveTasks() {
     const tasksElements = document.querySelectorAll('.task__title');
     const tasksArray = Array.from(tasksElements).map(element => element.textContent); // Извлекаем текст
     localStorage.setItem(STORAGE_KEY, JSON.stringify(tasksArray));
@@ -31,16 +31,19 @@ inputBtn.addEventListener('click', (e) => {
     addTask(inputText.value.trim());
 })
 
-inputText.addEventListener('keydown', (e) => {
-    if (e.key === 'enter') {
-        e.preventDefault();
-        addTask(inputText.value.trim());
-    }
-})
 
 function addTask(content) {
     if (!content) return;
-    const divTask = document.createElement('div');
+    taskLists.insertAdjacentHTML('afterbegin', `
+        <div class="task">
+            <div class="task__title">
+                ${content}
+            </div>
+            <a href="#" class="task__remove">&times;</a>
+        </div>
+`   );
+
+    /*const divTask = document.createElement('div');
     divTask.className = 'task';
     const div = document.createElement('div');
     div.textContent = content;
@@ -49,17 +52,20 @@ function addTask(content) {
     const a = document.createElement('a');
     a.className = 'task__remove';
     a.innerHTML = '&times;';
-    a.href = '#';
-
+    a.href = '#';*/
+    const tagsA = taskLists.querySelector('.task__remove');
+    console.log(tagsA);
+    tagsA.addEventListener('click', function (event) {
+            event.preventDefault();
+            const tagDiv = taskLists.querySelector('.task');
+            tagDiv.remove();
+            saveTasks();
+        });
     //метод для удаления задач
-    a.addEventListener('click', function (event) {
-        event.preventDefault();
-        divTask.remove();
-        saveTasks();
-    });
-    divTask.appendChild(div);
+
+    /*divTask.appendChild(div);
     divTask.appendChild(a);
-    taskLists.appendChild(divTask);
+    taskLists.appendChild(divTask);*/
     saveTasks();
     inputText.value = '';
 }
