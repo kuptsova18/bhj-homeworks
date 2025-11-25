@@ -36,7 +36,13 @@ function addToCart(productId, productImg, quantity) {
         const currentCount = parseInt(productCount.textContent);
         productCount.textContent = currentCount + quantity;
     } else {
-        const divCartProduct = document.createElement('div');
+        cartProducts.insertAdjacentHTML('afterbegin', `
+        <div class="cart__product" data-id="${productId}">
+            <img class="cart__product-image" src="${productImg}"> </img>
+            <div class="cart__product-count">${quantity}</div>
+        </div>
+`   );
+        /*const divCartProduct = document.createElement('div');
         divCartProduct.className = 'cart__product';
         divCartProduct.setAttribute('data-id', productId);
 
@@ -50,6 +56,6 @@ function addToCart(productId, productImg, quantity) {
         divCartProduct.appendChild(imgCart);
         divCartProduct.appendChild(quatityDiv);
 
-        cartProducts.appendChild(divCartProduct);
+        cartProducts.appendChild(divCartProduct);*/
     }
 }
