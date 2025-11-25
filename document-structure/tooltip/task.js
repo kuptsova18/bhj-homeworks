@@ -34,7 +34,7 @@ function showTooltip(element, title) {
     //добавляем подсказку
     tooltip.textContent = title;
     tooltip.className = 'tooltip tooltip_active';
-    element.appendChild(tooltip);
+    element.after(tooltip);
     //позиционируем
     const rect = element.getBoundingClientRect();
     const position = element.getAttribute('data-position')|| 'top';
