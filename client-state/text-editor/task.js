@@ -14,9 +14,7 @@ window.addEventListener('load', loadText)
 
 function loadText(){
     const savedText = localStorage.getItem('editor');
-    if(savedText){
         editor.value = savedText;
-    }
 }
 
 function saveText(){
