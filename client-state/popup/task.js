@@ -1,19 +1,27 @@
 document.addEventListener('DOMContentLoaded', function () {
     const subscribe = document.getElementById('subscribe-modal');
     const closeBtn = subscribe.querySelector('.modal__close');
-    
-    // Проверяем, было ли окно закрыто ранее
-    const modalClosed = localStorage.getItem('modalClosed');
-    
-    // Если окно не было закрыто - показываем его
+
+    const modalClosed = getCookie('modalClosed');
+    console.log(getCookie('modalClosed'))
+
     if (modalClosed !== 'true') {
         subscribe.classList.add('modal_active');
     }
     
-    // Обработчик закрытия окна
+
     closeBtn.addEventListener('click', function () {
         subscribe.classList.remove('modal_active');
-        // Сохраняем информацию, что окно было закрыто
-        localStorage.setItem('modalClosed', 'true');
+        setCookie('modalClosed','true');
+        
     });
+
+    function setCookie(modalClosed,value){
+        document.cookie = modalClosed +'=' + encodeURIComponent(value);
+    }
+    function getCookie(modalClosed){
+        const pairs = document.cookie.split('; ');
+        const cookies = pairs.find(p => p.startsWith(modalClosed + '='));
+        return cookies.substring(modalClosed.length+1);
+    }
 });
