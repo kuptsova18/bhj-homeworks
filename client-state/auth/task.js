@@ -6,36 +6,35 @@ const welcome = document.getElementById('welcome');
 const userIdText = document.getElementById('user_id');
 
 const btn = document.createElement('button');
-        btn.textContent = "Выйти";
-        welcome.appendChild(btn);
-        btn.addEventListener('click', function () {
-            localStorage.removeItem('user_id');
-            showAuth();
-            clearInputs();
-        })
-        
+btn.textContent = "Выйти";
+welcome.appendChild(btn);
+btn.addEventListener('click', function () {
+    localStorage.removeItem('user_id');
+    showAuth();
+    clearInputs();
+})
+
 signinForm.addEventListener('submit', function (e) {
     e.preventDefault();
     const xhr = new XMLHttpRequest();
 
-    xhr.addEventListener('readystatechange', () => {
-        if (xhr.readyState === xhr.DONE) {
-            if (xhr.status === 200 || xhr.status === 201) {
-                const response = JSON.parse(xhr.responseText);
-                if (response.success) {
-                    localStorage.setItem('user_id', response.user_id);
-                    showWelcome(response.user_id);
-                    clearInputs();
-                } else {
-                    alert('Неверный логин/пароль');
-                    clearInputs();
-                }
+    xhr.addEventListener('load', function () {
+        if (xhr.status === 200 || xhr.status === 201) {
+            const response = xhr.responseText;
+            if (response && response.success) {
+                localStorage.setItem('user_id', response.user_id);
+                showWelcome(response.user_id);
+                clearInputs();
             } else {
-                alert('Ошибка сервера. Попробуйте позже.');
-                console.error('Ошибка:', xhr.status, xhr.statusText);
+                alert('Неверный логин/пароль');
+                clearInputs();
             }
+        } else {
+            alert('Ошибка сервера. Попробуйте позже.');
+            console.error('Ошибка:', xhr.status, xhr.statusText);
         }
     });
+
     xhr.open('POST', 'https://students.netoservices.ru/nestjs-backend/auth')
     const formData = new FormData(signinForm);
     xhr.send(formData);
@@ -44,14 +43,11 @@ signinForm.addEventListener('submit', function (e) {
 
 document.addEventListener('DOMContentLoaded', function () {
     const UserId = localStorage.getItem('user_id');
-    if (UserId) {
-        showWelcome(UserId);
-    }
+    showWelcome(UserId);
 })
 
 function clearInputs() {
-    passwordUser.value = '';
-    nameUser.value = '';
+    signinForm.reset();
 }
 
 function showWelcome(UserIdSpan) {
